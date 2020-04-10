@@ -1,0 +1,30 @@
+<p>sample-one component works!</p>
+
+<button (click)="drawChart()">Draw chart</button>
+<button (click)="bindDataToGrid()">Bind grid</button>
+<button (click)="clear()">Clear</button>
+<br>
+<hr>
+<div class="plotly-container" [id]='uuid'>    
+</div>
+<hr>
+<wj-flex-grid #flex 
+    [itemsSource]="wijmoData"
+    [isReadOnly]="isReadOnly"
+    [selectionMode]="selectionMode"
+    (formatItem)="formatItem(flex, $event)"
+    [headersVisibility]="headersVisibility"
+    (selectionChanged)="selectedRow(flex,$event)"
+    style="height: 100%;width: 100%"     
+    >
+    <wj-flex-grid-filter #filter (filterApplied)="filterAppliedHandler(filter)"></wj-flex-grid-filter>
+    <!-- OP-475  -->
+    <ng-template wjFlexGridCellTemplate *ngIf="headersVisibility == 'All'" [cellType]="'RowHeader'" let-cell="cell">{{cell.row.index}}</ng-template>
+    <wj-flex-grid-column #gridcol *ngFor="let col of columns" [header]="col.header" [binding]="col.binding" [width]="col.width" [visible]="col.visible" [name]="col.header" [align]="col.align" [isReadOnly]="col.isReadOnly">            <ng-template wjFlexGridCellTemplate [cellType]="'CellEdit'">
+    <wj-input-number [(value)]="cell.value" [step]="1"></wj-input-number>
+  </ng-template>
+       
+    </wj-flex-grid-column>
+</wj-flex-grid>
+
+<hr>
